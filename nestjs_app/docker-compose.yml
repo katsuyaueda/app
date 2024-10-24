@@ -1,0 +1,29 @@
+
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'postgres_training'
+      POSTGRES_USER: 'postgres_training'
+      POSTGRES_PASSWORD: 'postgres_training'
+    container_name: postgres_yamato_training
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+volumes:
+  db-volume:
